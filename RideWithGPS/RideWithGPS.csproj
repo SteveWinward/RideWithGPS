@@ -8,6 +8,8 @@
     <Company>www.SteveWinward.com</Company>
     <Product />
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/SteveWinward/RideWithGPS</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SteveWinward/RideWithGPS</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
