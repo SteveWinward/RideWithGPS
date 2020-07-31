@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security;
 using System.Text;
@@ -19,18 +20,23 @@ namespace RideWithGPS
 
         protected HttpClient Client { get; set; }
 
-        public RideWithGPSClient()
+        protected RideWithGPSClient()
         {
             this.Client = new HttpClient();
         }
 
-        public RideWithGPSClient(HttpClient client, RideWithGPSConnectionInfo connectionInfo)
+        protected RideWithGPSClient(HttpClient client, RideWithGPSConnectionInfo connectionInfo)
         {
             this.Client = client;
 
             this.ConnectionInfo = connectionInfo;
         }
 
+        /// <summary>
+        /// Creates a new RideWithGPSClient object from the RideWithGPSConnectionInfo details
+        /// </summary>
+        /// <param name="connection">The connection details (api key, credentials, etc)</param>
+        /// <returns></returns>
         public static async Task<RideWithGPSClient> Connect(RideWithGPSConnectionInfo connection)
         {
             var httpClient = new HttpClient();
@@ -49,6 +55,10 @@ namespace RideWithGPS
             return client;
         }
 
+        /// <summary>
+        /// Returns the current user context details
+        /// </summary>
+        /// <returns></returns>
         public async Task<UserDetails> GetCurrentUserDetails()
         {
             var url = $"{this.ConnectionInfo.BaseUrl}/users/current.json?{this.GetStandardQueryString()}";
@@ -62,6 +72,11 @@ namespace RideWithGPS
             return json.user;
         }
 
+        /// <summary>
+        /// Looks up a users details from their unique user id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<UserDetails> GetUserDetails(int userId)
         {
             var url = $"{this.ConnectionInfo.BaseUrl}/users/{userId}.json?{this.GetStandardQueryString()}";
@@ -75,6 +90,13 @@ namespace RideWithGPS
             return json.user;
         }
 
+        /// <summary>
+        /// Returns a list of user trips.
+        /// </summary>
+        /// <param name="userId">The unique user id</param>
+        /// <param name="offset">Where to start the result set</param>
+        /// <param name="limit">How many results to return</param>
+        /// <returns></returns>
         public async Task<List<UserTrip>> GetUserTrips(int userId, int offset, int limit)
         {
             var url = $"{this.ConnectionInfo.BaseUrl}/users/{userId}/trips.json?{this.GetOffsetQueryString(offset, limit)}";
@@ -88,6 +110,11 @@ namespace RideWithGPS
             return json.Trips;
         }
 
+        /// <summary>
+        /// Returns the details for a specific trip id
+        /// </summary>
+        /// <param name="tripId">The unique trip id</param>
+        /// <returns></returns>
         public async Task<TripDetails> GetTripDetails(int tripId)
         {
             var url = $"{this.ConnectionInfo.BaseUrl}/trips/{tripId}.json?{this.GetStandardQueryString()}";
@@ -101,6 +128,11 @@ namespace RideWithGPS
             return json.trip;
         }
 
+        /// <summary>
+        /// Returns the query string for the initial auth connection
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <returns></returns>
         protected string GetAuthQueryString(RideWithGPSConnectionInfo connection)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
@@ -113,6 +145,10 @@ namespace RideWithGPS
             return query.ToString();
         }
 
+        /// <summary>
+        /// Returns the query string for the api calls that already have an auth token value
+        /// </summary>
+        /// <returns></returns>
         protected string GetStandardQueryString()
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
@@ -124,6 +160,12 @@ namespace RideWithGPS
             return query.ToString();
         }
 
+        /// <summary>
+        /// Returns a query string that includes the offset and limit details
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
         protected string GetOffsetQueryString(int offset, int limit = 100)
         {
             var standardQuery = this.GetStandardQueryString();
