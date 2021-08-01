@@ -18,7 +18,7 @@ https://www.nuget.org/packages/RideWithGPS/
 
 Below is a sample console applicaiton using the libary.  Replace the ApiKey, Email and Password with your actual login information.
 
-````
+````csharp
 using System;
 using System.Threading.Tasks;
 
