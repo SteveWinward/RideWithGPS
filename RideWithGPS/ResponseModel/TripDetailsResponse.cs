@@ -30,7 +30,7 @@ namespace RideWithGPS.ResponseModel
         public float first_lat { get; set; }
         public float last_lat { get; set; }
         public float last_lng { get; set; }
-        public Bounding_Box[] bounding_box { get; set; }
+        public Coordinates[] bounding_box { get; set; }
         public object locality { get; set; }
         public object postal_code { get; set; }
         public object administrative_area { get; set; }
@@ -147,12 +147,6 @@ namespace RideWithGPS.ResponseModel
 
     public class Watts
     {
-    }
-
-    public class Bounding_Box
-    {
-        public float lat { get; set; }
-        public float lng { get; set; }
     }
 
     public class Track_Points
