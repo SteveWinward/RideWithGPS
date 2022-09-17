@@ -8,7 +8,8 @@
     <Company>www.SteveWinward.com</Company>
     <Product />
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/SteveWinward/RideWithGPS</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SteveWinward/RideWithGPS</RepositoryUrl>
   </PropertyGroup>
