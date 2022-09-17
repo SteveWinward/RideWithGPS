@@ -23,3 +23,14 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      
+      # Publish to NuGet
+    - name: publish on version change
+      id: publish_nuget
+      # Using forked version of publish-nuget
+      # https://github.com/brandedoutcast/publish-nuget/issues/76
+      uses: alirezanet/publish-nuget@v3.0.4
+      with:
+        # Filepath of the project to be packaged, relative to root of repository
+        PROJECT_FILE_PATH: RideWithGPS/RideWithGPS.csproj
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
