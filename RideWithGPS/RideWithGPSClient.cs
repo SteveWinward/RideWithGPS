@@ -129,6 +129,81 @@ namespace RideWithGPS
         }
 
         /// <summary>
+        /// Returns a list of user routes.
+        /// </summary>
+        /// <param name="userId">The unique user id</param>
+        /// <param name="offset">Where to start the result set</param>
+        /// <param name="limit">How many results to return</param>
+        /// <returns></returns>
+        public async Task<List<UserRoute>> GetUserRoutes(int userId, int offset, int limit)
+        {
+            var url = $"{this.ConnectionInfo.BaseUrl}/users/{userId}/routes.json?{this.GetOffsetQueryString(offset, limit)}";
+
+            var result = await this.Client.GetAsync(url);
+
+            var response = await result.Content.ReadAsStringAsync();
+
+            var json = JsonSerializer.Deserialize<UserRoutesResponse>(response);
+
+            return json.Routes;
+        }
+
+        /// <summary>
+        /// Returns the details for a specific route id
+        /// </summary>
+        /// <param name="routeId">The unique route id</param>
+        /// <returns></returns>
+        public async Task<RouteDetails> GetRouteDetails(int routeId)
+        {
+            var url = $"{this.ConnectionInfo.BaseUrl}/routes/{routeId}.json?{this.GetStandardQueryString()}";
+
+            var result = await this.Client.GetAsync(url);
+
+            var response = await result.Content.ReadAsStringAsync();
+
+            var json = JsonSerializer.Deserialize<RouteDetailsResponse>(response);
+
+            return json.route;
+        }
+
+        /// <summary>
+        /// Returns a list of user events.
+        /// </summary>
+        /// <param name="userId">The unique user id</param>
+        /// <param name="groupName">Specify the desired event group (past, current, ...) or leave empty to get all events</param>
+        /// <returns></returns>
+        public async Task<List<UserEvent>> GetUserEvents(int userId, string groupName = null)
+        {
+            var url = $"{this.ConnectionInfo.BaseUrl}/users/{userId}/events.json?{this.GetStandardQueryString()}";
+
+            var result = await this.Client.GetAsync(url);
+
+            var response = await result.Content.ReadAsStringAsync();
+
+            var json = JsonSerializer.Deserialize<UserEventsResponse>(response);
+
+            return json.Events(groupName);
+        }
+
+        /// <summary>
+        /// Returns the details for a specific event id
+        /// </summary>
+        /// <param name="eventId">The unique event id</param>
+        /// <returns></returns>
+        public async Task<EventDetails> GetEventDetails(int eventId)
+        {
+            var url = $"{this.ConnectionInfo.BaseUrl}/events/{eventId}.json?{this.GetStandardQueryString()}";
+
+            var result = await this.Client.GetAsync(url);
+
+            var response = await result.Content.ReadAsStringAsync();
+
+            var json = JsonSerializer.Deserialize<EventDetailsResponse>(response);
+
+            return json.eventDetails;
+        }
+
+        /// <summary>
         /// Returns the query string for the initial auth connection
         /// </summary>
         /// <param name="connection"></param>
