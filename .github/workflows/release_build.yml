@@ -1,0 +1,40 @@
+name: ReleaseBuild
+
+on:
+  release:
+    types: [published]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+      # Restore nuget packages
+    - name: Restore dependencies
+      run: dotnet restore
+      
+      # build the source
+    - name: Build
+      run: dotnet build --no-restore --configuration Release      
+      
+      # Run the unit tests
+    - name: Unit Tests
+      run: dotnet test --no-build --verbosity normal --configuration Release
+      
+      # Publish the Nuget file to Nuget.org
+    - name: PushNuget
+      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
