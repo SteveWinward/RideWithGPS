@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace RideWithGPS.ResponseModel
 {
@@ -59,19 +57,25 @@ namespace RideWithGPS.ResponseModel
     public class PointOfInterest
     {
         public int id { get; set; }
+        [JsonPropertyName("uid")]
         public int user_id { get; set; }
+        [JsonPropertyName("v")]
         public int visibility { get; set; }
+        [JsonPropertyName("t")]
         public int poi_type { get; set; }
         public float lng {get; set;}
         public float lat { get; set; }
+        [JsonPropertyName("n")]
         public string name { get; set; } = string.Empty;
         public string? url { get; set; }
+        [JsonPropertyName("d")]
         public string description { get; set; } = string.Empty;
         public string? mongo_id { get; set; }
         public int parent_id { get; set; }
         public string parent_type { get; set; } = string.Empty;
         public DateTime created_at{ get; set; }
         public DateTime updated_at{ get; set; }
+        [JsonPropertyName("pids")]
         public List<int> photo_ids { get; set; } = new();
     }
 #nullable disable
@@ -95,8 +99,4 @@ namespace RideWithGPS.ResponseModel
         public float x { get; set; }
         public float y { get; set; }
     }
-
-
-
-
 }
