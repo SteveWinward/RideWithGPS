@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 
 env:
+  # setting the dotnet version
   DOTNET_VERSION: '8.0.x'
 
 jobs:
@@ -16,8 +17,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # gets the current commmit
     - uses: actions/checkout@v4
-    
+
+    # installs the dotnet command line tool
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
