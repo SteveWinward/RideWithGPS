@@ -1,33 +1,41 @@
-name: .NET
+name: Main Build
 
 on:
   push:
     branches: [ "master" ]
+    # Ignore any changes to the README.md file
     paths-ignore: 
       - '**/README.md'
   pull_request:
     branches: [ "master" ]
 
 env:
+  # Setting the .NET version
   DOTNET_VERSION: '8.0.x'
   
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
+    # check out the latest commit
     - uses: actions/checkout@v4
-    
+
+    # setup the dotnet command line tool
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
+    # restore all nuget packages / dependancies for the solution
     - name: Restore dependencies
       run: dotnet restore
+
+    # build the solution
     - name: Build
       run: dotnet build --no-restore
+    
+    # run the unit tests
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
