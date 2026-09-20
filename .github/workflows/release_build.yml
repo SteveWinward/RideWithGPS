@@ -11,6 +11,10 @@ env:
   # setting the dotnet version
   DOTNET_VERSION: '8.0.x'
 
+permissions:
+  id-token: write # Required for NuGet trusted publishing (OIDC)
+  contents: read
+
 jobs:
   build:
 
@@ -38,6 +42,13 @@ jobs:
     - name: Unit Tests
       run: dotnet test --no-build --verbosity normal --configuration Release
       
+      # Obtain a short-lived NuGet API key via OIDC trusted publishing
+    - name: NuGet login
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
       # Publish the Nuget file to Nuget.org
     - name: PushNuget
-      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+      run: dotnet nuget push **/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
